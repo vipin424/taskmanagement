@@ -7,6 +7,7 @@
     <title>@yield('title', 'Task Management App')</title>
     <!-- Include Bootstrap or Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
     <!-- SweetAlert2 CSS -->
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
@@ -19,12 +20,15 @@
 <div class="container">
     <!-- Navigation -->
     <nav class="navbar navbar-light bg-light mb-3">
+    <div class="container-fluid">
         <a class="navbar-brand" href="{{ route('tasks.index') }}">Task Management</a>
-        <form class="form-inline" action="{{ route('tasks.index') }}" method="GET">
-            <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search tasks..." value="{{ request('search') }}">
+        <form class="d-flex" action="{{ route('tasks.index') }}" method="GET">
+            <input class="form-control me-2" type="search" name="search" placeholder="Search tasks..." value="{{ request('search') }}">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
-    </nav>
+    </div>
+</nav>
+
 
     <!-- Main Content -->
     <main>

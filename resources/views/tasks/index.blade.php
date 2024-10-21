@@ -6,7 +6,9 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>Tasks</h1>
-    <a href="{{ route('tasks.create') }}" class="btn btn-primary">+ Add Task</a>
+    <a href="{{ route('tasks.create') }}" class="btn btn-primary">
+        <i class="bi bi-plus"></i> Add Task
+    </a>
 </div>
 
 <!-- Filter Options -->
@@ -27,20 +29,30 @@
 <div class="accordion" id="taskAccordion">
     @foreach($tasks as $task)
     <div class="accordion-item">
-        <h2 class="accordion-header" id="heading{{ $task->id }}">
-            <button class="accordion-button {{ $loop->first ? '' : 'collapsed' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $task->id }}" aria-expanded="{{ $loop->first ? 'true' : 'false' }}">
-                {{ $task->title }} <span class="badge bg-info ms-3">{{ $task->status }}</span>
-            </button>
+      <h2 class="accordion-header" id="heading{{ $task->id }}">
+        <button class="accordion-button {{ $loop->first ? '' : 'collapsed' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $task->id }}" aria-expanded="{{ $loop->first ? 'true' : 'false' }}">
+            {{ $task->title }} 
+            <span class="badge ms-3 
+                {{ $task->status == 'Completed' ? 'bg-success' : '' }} 
+                {{ $task->status == 'Pending' ? 'bg-warning' : '' }} 
+                {{ $task->status == 'Deleted' ? 'bg-danger' : '' }}">
+                {{ $task->status }}
+            </span>
+          </button>
         </h2>
         <div id="collapse{{ $task->id }}" class="accordion-collapse collapse {{ $loop->first ? 'show' : '' }}" aria-labelledby="heading{{ $task->id }}" data-bs-parent="#taskAccordion">
             <div class="accordion-body">
                 <p><strong>Description:</strong> {{ $task->description }}</p>
-                <p><strong>Due Date:</strong> {{ $task->due_date->format('d M Y, H:i') }}</p>
+                <p><strong>Due Date:</strong> {{ $task->due_date->format('d M Y, g:i A') }}</p>
                 <p><strong>Time Lapsed:</strong> {{ $task->created_at->diffForHumans() }}</p>
 
                 <div class="d-flex justify-content-end">
-                <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-warning me-2 btn-edit" data-task-id="{{ $task->id }}" data-task-status="{{ $task->status }}">Edit</a>
-                <a href="#" class="btn btn-sm btn-danger btn-delete" data-task-id="{{ $task->id }}" data-task-title="{{ $task->title }}" data-is-editing="false">Delete</a>
+                <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-warning me-2 btn-edit" data-task-id="{{ $task->id }}" data-task-status="{{ $task->status }}">
+                    <i class="bi bi-pencil"></i> Edit
+                </a>
+                <a href="#" class="btn btn-sm btn-danger btn-delete" data-task-id="{{ $task->id }}" data-task-title="{{ $task->title }}" data-is-editing="false">
+                    <i class="bi bi-trash"></i> Delete
+                </a>
                 </div>
             </div>
         </div>
