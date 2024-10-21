@@ -30,7 +30,7 @@ class TaskController extends Controller
                 });
             }
 
-        $tasks = $tasks->orderBy('due_date', 'desc')->paginate(10);
+        $tasks = $tasks->orderBy('created_at', 'desc')->paginate(10);
         return view('tasks.index', compact('tasks'));
     }
 
@@ -76,13 +76,13 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
+   
         if ($task->status === 'Completed') {
             return response()->json([
                 'status' => 'error',
                 'message' => 'You cannot edit a completed task.'
             ], 403); // Forbidden status code
         }
-    
         // Return the view for editing if not completed
         return view('tasks.edit', compact('task'));
     }

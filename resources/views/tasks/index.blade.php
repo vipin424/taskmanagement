@@ -39,11 +39,8 @@
                 <p><strong>Time Lapsed:</strong> {{ $task->created_at->diffForHumans() }}</p>
 
                 <div class="d-flex justify-content-end">
-                    <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-warning me-2 btn-edit" data-task-id="{{ $task->id }}">Edit</a>
-                    <a href="#" class="btn btn-sm btn-danger btn-delete"
-                    data-task-id="{{ $task->id }}"
-                    data-task-title="{{ $task->title }}"
-                    data-is-editing="false">Delete</a>
+                <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-warning me-2 btn-edit" data-task-id="{{ $task->id }}" data-task-status="{{ $task->status }}">Edit</a>
+                <a href="#" class="btn btn-sm btn-danger btn-delete" data-task-id="{{ $task->id }}" data-task-title="{{ $task->title }}" data-is-editing="false">Delete</a>
                 </div>
             </div>
         </div>
@@ -113,42 +110,30 @@
         });
     });
 
+    // Edit Part
+    document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btn-edit').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default action (page redirection)
+            
+            const taskStatus = this.getAttribute('data-task-status');
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // Set up Edit Mode
-        document.querySelectorAll('.btn-edit').forEach(function (editButton) {
-            editButton.addEventListener('click', function (event) {
-                event.preventDefault(); // Prevent the default behavior
-
-                const taskId = this.getAttribute('data-task-id');
-
-                // Check the task status by making an AJAX request to the server
-                fetch(`/tasks/${taskId}/edit`, {
-                    method: 'GET',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'error') {
-                        // Show SweetAlert error message if the task is completed
-                        Swal.fire({
-                            title: 'Error',
-                            text: data.message,
-                            icon: 'error',
-                            confirmButtonText: 'OK'
-                        });
-                    } else {
-                        // Redirect to the edit page if not completed
-                        window.location.href = `/tasks/${taskId}/edit`;
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            });
+            // Check if the task is completed
+            if (taskStatus === 'Completed') {
+                Swal.fire({
+                    title: 'Task Completed',
+                    text: 'You cannot edit a completed task.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                // If task is not completed, proceed to the edit page
+                window.location.href = this.getAttribute('href');
+            }
         });
     });
+});
+
 </script>
 @endsection
 
